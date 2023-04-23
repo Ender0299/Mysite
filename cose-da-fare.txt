@@ -1,0 +1,243 @@
+verona 5/6 marzo	17 euro
+vicenza 10/11/12   10 euro
+cerea 15/16 aprile   6 euro
+
+
+\\
+
+https://wiki.archlinux.org/title/CPU_frequency_scaling
+
+husqvarna 701 depo + ripotenziamento
+honda crf 450 
+ktm/husqvarna/gasgas 350 4t + omologazione e immatricolazione
+ktm/husqvarna/gasgas 300 2t + omologazione e immatricolazione
+
+\\
+
+come si crea una vps -> creare una vm(orcacole vm)/pc con un so(di tipo server) che permetta i collegameti ssh e collegarsi
+					collegamento ssh tramite cmd
+
+\\
+
+licenze windows = licenze oem = valgono solo per un disco...
+                  licenze riutilizzabili = si inseriscono nel bios e sono solo per una versione di windows
+
+\\
+
+vpn = crea una connessione a un server criptando i file e l'ip	(quello con cui ci si connette a internet)
+vpn + vpls = crea un lan connettendosi a un server remoto non agisce sugli ip (	" )
+vlan = crea una lan tra 2 router senza connetteri a un server
+
+\\
+
+cartelle condivise windows: abilitare servizio"Pubblicazione risorse per individuazione" su account di sistema locale, abilitare le ipostazioni di condivisione avanzate, condividere la cartella
+
+\\
+
+parizioni linux(partizioni linux non riducibili) = fornire spazio su disco -> fare partizioni e aggiungerle a un virtual group doverileva tutte le part. come un disco unico e le separa nei dichi logici
+
+installare gparted = installre librerie(yum install epel-release); aggiornare -y(yum update -y);installare gparted(yum install gparted)
+
+\\
+
+(centos)rende il "file.sh" un eseguibile con ./ (chmod +x file.sh)
+(ubuntu)il file .sh si esegue con (sh file.sh)
+
+\\
+
+sito hostato su una vps con ddns e apache(programma che riconduce ip a file e cartelle)
+
+sito web centos = - installare httpd(yum install httpd); fare start e enable di httpd(systemctl start httpd,systemctl enable httpd) - controllare status(systemctl status httpd);
+                    abilitare http e https nel firewall e renderli statici(firewall-cmd --add-service=http, firewall-cmd --add-service=https, firewall-cmd --runtime-to-permanent) - controllare status (firewall-cmd --list-all);
+                    caricare file index.html con collegamento ftp
+                  - RENDERLO ONLINE = avere un ddns e aprire porte 80 e 443 sul router
+                  - (ssl valido) Abilitare le epel-release(apt install epel-release); installare moudlo per apache(apt install mod_ssl); installare certbot(apt install certbot); nstallre la versione per apache(apt install python3-certbot-apache);
+                    creare un virtual host privato dove poter mettere i nuovi certificati (cd /etc/httpd/conf.d , nano yourDomainName.conf); scrivere il virtualhost( <VirtualHost *:80>; ServerName yourDomainName.com; DocumentRoot /var/www/html; </VirtualHost> );
+                    controlare se viene rilevato (httpd -D DUMP_VHOSTS); installa i certificati(certbot --apache)
+                    [https://stackoverflow.com/questions/59549309/unable-to-find-a-virtual-host-listening-on-port-80-please-add-a-virtual-host]
+
+
+sito web ubuntu = - installare apache (apt install apache2); fare start ed enable (systemctl start apache2,systemctl enable apache2) - controllare status(systemctl status apache2);
+                    caricare file index.html con collegamento ftp
+                  - RENDERLO ONLINE = avere un ddns e aprire porte 80 e 443 sul router
+                  - (Self-singed) Intallare openssl(apt install openssl); creare file key per il cripting https (openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /etc/ssl/private/nome che vuoi.key -out /etc/ssl/certs/nome che vuoi.crt);
+                    impostare i certificati nel file (nano /etc/apache2/sites-available/default-ssl.conf); impostare il redirect sul protocollo https (nano /etc/apache2/sites-available/000-default.conf);
+                    abilitare il firewall con eccezione (ufw allow 'Apache Full') ; abilitare il certificato ssl (a2enmod ssl, a2ensite default-ssl) ; fare un restart del servizio (systemctl restart apache2)
+                    [https://www.digitalocean.com/community/tutorials/how-to-create-a-self-signed-ssl-certificate-for-apache-in-ubuntu-18-04]
+                  - (ssl valido) Abilitare le epel-release(apt install epel-release); installare moudlo per apache(apt install mod_ssl); installare certbot(apt install certbot); installre la versione per apache(apt install python3-certbot-apache);
+                    creare certificati (certbot --apache)
+
+
+connessione ftp = scaricare vsftpd e configurarlo(nano /etc/vsftpd.cof)
+
+connessione ssh ubuntu = scaricare openssh -apre le porte(22) in ipv4 in automatico
+
+\\
+
+Telnet = arp add 192.168.100.5 2c:f0:5d:05:bc:e9
+	   arp add 192.168.100.6 24:be:05:17:f6:97
+
+\\
+
+porte wol = 7/9
+
+PROBLEMI WOL:
+Bios
+
+	Wake on:
+		-wake on intel chipset
+		-wake on pci-e
+		-wake on usb
+
+	APC/APCi Settings:
+		.....
+
+	OS startup:
+		-MSI Fast boot
+		-Fast boot
+
+OS
+
+	Drivers:
+		-Scheda di rete compatibile con wol
+		-Driver aggiornati
+
+	Impostazioni IP/MAC:
+		-APR Table PC
+
+	Impostazioni connessione router:
+		-ip statico e gateway
+
+	Impostazioni scheda di rete:
+		------
+
+	Individuazione in rete:
+		-PC visibile in rete
+
+	Firewall ??
+	Servizi ??
+
+Router --> PROBLEMA DHCP
+
+	IPv4 statico - dhcp reservation - arp statiche !!
+	Porta 9 aperta - traffic redirect 
+
+
+
+Shift+riavvio= modalita' provvisoria
+Shift+arresta= spegnimento senza dati in ram
+
+
+tp-link=48h
+d-link=70gg
+sitecom=infinito
+
+
+Se il paccetto viene inviato tramite lan il modem/router cerca il mac solo nella subrete, mentre se il pacchetto viene inviato tramite wan il router cerca di ricollegare 
+la provenienza del mac e invia il pacchetto
+Il pc deve rimanere collegato al router, in caso di scollegameto questo non sara piu in grado di riconoscere la provenienza del mac del pc.
+Il modem vodafone si dimentica il router tranne se il router viene impostato come host(nat).
+Il pc puo' anche scollegarsi dalla rete ma il modem deve avare le arp statiche.
+
+
+https://forum.ubuntu-it.org/viewtopic.php?t=509241
+https://victoriavette.com/it/4131-how-to-clear-the-arp-cache-in-windows-7-and-windows-server-2008.html
+
+\\
+
+Shutdown remoto:
+aprire porte ssh
+sistemare criteri account su pc destinazione
+impostare net use \\REMOTEPCNAME
+shutdown /s /m \\HOSTNAME/PCNAME /f /t 01
+shutdown /s /m \\enderdns.ddns.net /f /t 01
+
+\\
+
+collegamento ssh remoto windows: 
+scaricare servizio server ssh come app facoltativa(-apre le porte(22) in ipv4 in automatico), attivare il servizio omonimo, aprire porte per outlan
+scaricare client ssh e inserire username@IP
+
+\\
+
+Private cloud server:
+Su ubuntu scaricare curl(apt install curl), installare CasaOS(link sul sito), aprire pote 80 e 443, andare sul sito e fare l'account
+
+\\
+
+Programmazione:
+	Compilazione:
+		File.c  ->  Processamento  ->  File.I  ->  traduzione in assembly  ->  file.s  ->  Assembler  ->  file.o(codice macchina)  ->  Linker  ->  File.exe
+		Ref(prog/studio/assembly)
+	Link:
+		http://www.linuxdidattica.org/docs/altre_scuole/planck/assembly-linux/assembly-linux1.html
+		https://bakarabu.wordpress.com/2021/10/01/nasm-x64-assembly-programming-in-windows/
+	
+\\
+
+porte:   https://turbolab.it/sicurezza-13/porta-80-aperta-cosa-significa-guida-riepilogativa-principali-numeri-porta-tcp-comunicazione-rete-1018
+
+\\
+
+https://www.spaceclick.com/it/blog/le-scorciatoie-i-comandi-da-tastiera-di-windows-10/
+
+\\
+
+https://online-fix.me
+
+\\
+
+https://xlabs.dev/support_iw6x_client#nonsteam
+
+\\
+
+Windows keys:  https://learn.microsoft.com/it-it/windows-server/get-started/kms-client-activation-keys
+
+\\
+
+Ripristino e backup:
+Windows:
+ Backup(punto di ripristino)=salvataggi utilizzabili solo con windows funzionante (almeno modalita' provvisoria)
+ Unita' di ripristino=salvataggi usb/dischi per il ripristino anche su altri win.
+ Dischi di ripristino=cd/dvd come unita' di ripristino
+ ISO=Salvataggi utilizzabili su usb flash
+Macrium :
+ 
+\\
+
+La vritualizzazione delle macchine virtuali puo' basarsi su vtx o hyper-v in base a quale tecnologia si preferisce utilizzare
+
+\\
+
+Schermo remoto virtualbox fa vedere in diretta la macchina virtuale
+RDP su Ubuntu utilizza i keyring che se criptati richiedono la password al riavvio ripristinando la password in raandokmica, se non criptati(nessuna password dei keyring) mantiene la pssword impostata
+
+\\
+
+Programmi per recovery data:
+https://www.aomeitech.com/pa/standard.html
+https://www.easeus.com/datarecoverywizard/free-data-recovery-software.htm
+..
+https://marcoappe.com/hard-disk-con-settori-danneggiati-cosa-fare
+http://www.dposoft.net/hdd.html
+
+\\
+
+Shop interessanti:
+
+https://www.bpm-power.com/it/online/informatica
+https://shop.marcomweb.it/it/shop-online/produttore/raspberry-pi.html
+https://it.webuy.com
+https://it.pcpartpicker.com
+
+\\
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+https://www.minecraftforum.net/forums/support/server-support-and/1893815-internet-crashes-when-people-join-my-server
+
+2cf05d05bce9
+
+
+
+MR SAXOBEAT - hardstyle song 🔱
